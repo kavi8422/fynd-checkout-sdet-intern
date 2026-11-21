@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Checkout</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="checkout-card">
+    <header class="card-header">
+      <h1>MINI CHECKOUT</h1>
+      <span class="demo-badge">Demo Store</span>
+    </header>
+
+    <!-- Cart Section -->
+    <section aria-label="Shopping Cart">
+      <!-- Product A -->
+      <div class="product-item" data-testid="product-a">
+        <div class="product-top">
+          <div>
+            <div class="product-name">Product A</div>
+            <div class="product-unit-price" data-testid="price-a">₹500 each</div>
+          </div>
+          <div class="line-price" id="line-total-a" data-testid="line-total-a">₹500</div>
+        </div>
+        <div class="product-bottom">
+          <div class="stepper">
+            <button type="button" id="dec-a" data-testid="dec-a" aria-label="Decrease Product A">−</button>
+            <span id="qty-a" data-testid="qty-a">1</span>
+            <button type="button" id="inc-a" data-testid="inc-a" aria-label="Increase Product A">+</button>
+          </div>
+          <button type="button" class="btn-text" id="remove-a" data-testid="remove-a">Remove</button>
+        </div>
+      </div>
+
+      <!-- Product B -->
+      <div class="product-item" data-testid="product-b">
+        <div class="product-top">
+          <div>
+            <div class="product-name">Product B</div>
+            <div class="product-unit-price" data-testid="price-b">₹300 each</div>
+          </div>
+          <div class="line-price" id="line-total-b" data-testid="line-total-b">₹300</div>
+        </div>
+        <div class="product-bottom">
+          <div class="stepper">
+            <button type="button" id="dec-b" data-testid="dec-b" aria-label="Decrease Product B">−</button>
+            <span id="qty-b" data-testid="qty-b">1</span>
+            <button type="button" id="inc-b" data-testid="inc-b" aria-label="Increase Product B">+</button>
+          </div>
+          <button type="button" class="btn-text" id="remove-b" data-testid="remove-b">Remove</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order Summary -->
+    <section class="summary-box" aria-label="Order Summary">
+      <div class="summary-row">
+        <span>Total Items</span>
+        <span id="total-items" data-testid="total-items">2</span>
+      </div>
+      <div class="summary-row summary-total">
+        <span>Order Total</span>
+        <span id="order-total" data-testid="order-total">₹800</span>
+      </div>
+    </section>
+
+    <!-- Customer Details & Submit -->
+    <form id="checkout-form" novalidate>
+      <div class="form-group">
+        <label for="customer-name">Customer Name <span class="required">*</span></label>
+        <input
+          id="customer-name"
+          name="customerName"
+          type="text"
+          placeholder="Enter your full name"
+          autocomplete="name"
+          data-testid="customer-name"
+        />
+      </div>
+
+      <!-- Validation message directly above Place Order button -->
+      <div
+        id="validation-error"
+        class="validation-error"
+        role="alert"
+        data-testid="validation-error"
+      ></div>
+
+      <button type="submit" id="place-order-btn" class="btn-primary" data-testid="place-order-btn">
+        Place Order
+      </button>
+    </form>
+
+    <!-- Order Confirmation -->
+    <section
+      id="order-confirmation"
+      class="confirmation-card"
+      role="status"
+      data-testid="order-confirmation"
+      hidden
+    >
+      <h2>✅ Order Successful</h2>
+      <div class="ref-block">
+        <span class="ref-label">Reference:</span>
+        <strong id="order-ref" data-testid="order-ref"></strong>
+      </div>
+      <p class="thank-you">
+        Thank you for your purchase, <strong id="confirmed-name" data-testid="confirmed-name"></strong>!
+      </p>
+      <p class="confirmed-total">
+        Total Paid: <strong id="confirmed-total" data-testid="confirmed-total"></strong>
+      </p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
