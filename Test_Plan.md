@@ -1,62 +1,106 @@
-E-Commerce Checkout Test Plan
+MINI CHECKOUT TEST PLAN
+ 
+ 
+1. OBJECTIVE
+Verify that the checkout:
+- calculates totals accurately
+- validates user input
+- prevents duplicate order submissions
 
-Objective:
-Verify that the checkout process works correctly, calculates totals accurately, validates user input, and prevents duplicate order submissions.
 
-Scope:
-- In Scope: Product quantity management, cart calculations, customer name validation, order placement, order confirmation, and duplicate submission prevention.
-- Out of Scope: Backend persistence, payment processing, coupons, mobile-viewport testing, and browsers other than Chromium.
+2. SCOPE
+In scope:
+- product quantity management
+- cart calculations
+- customer name validation
+- order placement and confirmation
+- duplicate submission prevention
+Out of scope:
+- backend persistence
+- payment processing
+- coupons
+- mobile-viewport testing
+- browsers other than Chromium
 
-Key Risks:
-1. Incorrect order total calculation
-2. Empty cart checkout
-3. Missing or whitespace-only customer name
-4. Duplicate orders from double-clicking
-5. Incorrect quantity handling
 
-Automated Test Cases (tests/checkout_test.py):
-- TC01 - Successful checkout: Confirmation and order reference displayed - PASS
-- TC02 - Missing customer name: Validation message shown - PASS
-- TC03 - Quantity change updates total: Line and order totals recalculate correctly - PASS
-- TC04 - Empty cart checkout: Checkout blocked with empty cart message - PASS
-- TC05 - Name with spaces only: Validation message shown - PASS
-- TC06 - Preserve name after validation error: Previously entered name remains intact - PASS
-- TC07 - Double-click Place Order: Only one confirmation generated - PASS
-- TC08 - Quantity cannot go below minimum: Minus button stops at quantity 1 and never becomes negative - PASS
+3. ENVIRONMENT
+- Windows
+- Python 3.14.0
+- pytest 9.2.0
+- Playwright with Chromium
+Command to run the tests:
+python -m pytest tests -v
+ 
+ 
+4. HOW THE PAGE BEHAVES
+- Starts with Product A (Rs 500, qty 1) and Product B (Rs 300, qty 1)
+- Starting order total is Rs 800
+- The minus button is disabled at quantity 1
+- Remove sets the quantity to 0 and the line total to Rs 0
+- Total Items counts total quantity (A=3 and B=1 gives 4)
+- After a successful order, the Place Order button is disabled and shows "Order Placed"
+- The order reference looks like ORD- followed by 6 letters or digits
 
-Verification Evidence:
-verification/automated_test_results.png
 
-Manual Test Cases:
+5. KEY RISKS (HIGHEST PRIORITY FIRST)
+- R1 (High): duplicate orders from double-clicking
+- R2 (High): incorrect order or line total
+- R3 (High): empty cart checkout
+- R4 (High): missing or whitespace-only name
+- R5 (Medium): typed data lost after an error
+- R6 (Medium): quantity going below the minimum
 
-MT01 - Empty Cart Checkout Validation
-Precondition: Open index.html in a fresh browser tab.
-Steps:
-1. Click Remove on Product A.
-2. Click Remove on Product B.
-3. Type "Kavita Reddy" in the Customer Name field.
-4. Click Place Order.
-Expected Result: Error message "Cart cannot be empty" appears above the button, "Kavita Reddy" remains in the input box, and no order confirmation is shown.
-Actual Result: Error message displayed clearly, customer name remained intact, and checkout was blocked.
-Status: PASS
 
-MT02 - Rapid Double-Click Protection
-Precondition: Refresh index.html so both products are back in the cart.
-Steps:
-1. Type "Kavita Reddy" in the Customer Name field.
-2. Rapidly double-click the Place Order button.
-Expected Result: Only one order confirmation card and one ORD-XXXXXX reference are generated, and the button disables with text "Order Placed".
-Actual Result: Single confirmation card and order reference displayed; button locked immediately.
-Status: PASS
+6. AUTOMATED TEST CASES (tests/checkout_test.py)
+TC07 - Double-click Place Order
+- Risk: R1
+- Expected: one confirmation, one reference, button disabled
+- Result: PASS
+TC03 - Quantity change updates totals
+- Risk: R2
+- Expected: line and order totals are exact at each step
+- Product A to 3: line Rs 1500, total Rs 1800
+- Product A to 2: line Rs 1000, total Rs 1300
+- Remove Product B: total Rs 1000
+- Result: PASS
+TC01 - Successful checkout
+- Risk: R2
+- Expected: confirmation, name, total Rs 800 and order reference shown
+- Result: PASS
+TC04 - Empty cart checkout
+- Risk: R3
+- Expected: message "Cart cannot be empty", no confirmation
+- Result: PASS
+TC02 - Missing customer name
+- Risk: R4
+- Expected: message "Please enter your name", no confirmation
+- Result: PASS
+TC05 - Name with spaces only
+- Risk: R4
+- Expected: message "Please enter your name", no confirmation
+- Result: PASS
+TC06 - Preserve name after validation error
+- Risk: R5
+- Expected: error shown, typed name stays in the field
+- Result: PASS
+TC08 - Quantity cannot go below minimum
+- Risk: R6
+- Expected: minus button disabled at 1
+- Quantity stays 1, line stays Rs 500, total stays Rs 800
+- Result: PASS
+Overall result: 8 passed
+Result: verification/automated_test_results.png
+ 
+ 
+7. MANUAL TEST RESULTS
+Empty cart checkout
+- Steps: remove both products, enter a name, click Place Order
+- Observed: validation shown correctly, typed name kept
+- Result: PASS
+Double-click Place Order
+- Steps: enter a valid name, click Place Order twice quickly
+- Observed: one confirmation, button locked
+- Result: PASS
 
-MT03 - Whitespace-Only Name Validation
-Precondition: Refresh index.html.
-Steps:
-1. Type three spaces ("   ") into the Customer Name field.
-2. Click Place Order.
-Expected Result: Error message "Please enter your name" appears above the button and no order confirmation is shown.
-Actual Result: Validation error displayed and checkout was blocked.
-Status: PASS
-
-Defects Found:
+8. DEFECTS FOUND
 No defects identified during testing.
